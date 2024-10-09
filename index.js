@@ -4,12 +4,16 @@ const port = 4400;
 
 app.use(express.urlencoded({extended:true}));
 
+app.get('/', (req, res)=>{
+    res.json("Welcome, Home!");
+});
+
+
 app.get('/health', (req, res)=>{
     res.json("Feeling well!");
 });
 
 app.listen(port,(err)=>{
     if(err) {console.log(err)}
-
     console.log(`Server is listening at ${port}`);
 });

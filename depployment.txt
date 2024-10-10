@@ -1,0 +1,9 @@
+--- Deployment process
+
+- created a basic server using express
+- created a new repo in github and pushed code in it
+- created new account in heroku
+- login in heroku cli with email and password
+- conneted heroku with `heroku: -a remote <app_name>`
+- pushed code in heroku app for deployment
+- app deployed.

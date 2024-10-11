@@ -1,28 +1,44 @@
-version: '3.9'
+version: '3.8'
 services:
-  mongo:
+  app:
+    build:
+      context: .
+    container_name: express-app-server
+    ports:
+      - '3000:3000'
+    environment:
+      - NODE_ENV=development
+      - MONGO_URL=mongodb://mongo:27017/mydatabase
+      - REDIS_URL=redis://redis:6379
+    depends_on:
+      - mongodb
+      - redis
+      - mongo-express
+  # mongodb container
+  mongodb:
     image: mongo:latest
-    container_name: local_mongo
-    restart: always
+    container_name: mongo-1
     ports:
       - "27017:27017"
-  mongoexpress:
-    image: mongo-express
-    container_name: mongo_container
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=password
+    volumes:
+      - ./mongo-data:/data/db
+  # mongo-express container
+  mongo-express:
+    image: mongo-express:latest
+    container_name: mongo-express
+    restart: always
     ports:
       - "8081:8081"
     environment:
-      - ME_CONFIG_MONGODB_URL=mongodb://mongo:27017
-      - ME_CONFIG_BASICAUTH=true
-    depends_on:
-      - mongo
-    restart: always
+      - ME_CONFIG_MONGODB_ADMINUSERNAME=admin
+      - ME_CONFIG_MONGODB_ADMINPASSWORD=password
+      - ME_CONFIG_MONGODB_SERVER=mongodb
+  # redis container
   redis:
     image: redis:latest
-    container_name: my_custom_redis2
-    restart: always
+    container_name: redis-2
     ports:
-      - "6379:6379"
-volumes:
-  mongo_data:
-    driver: local
+      - "6380:6379"
